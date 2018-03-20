@@ -1,0 +1,75 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package solver;
+
+/**
+ *
+ * @author yanqiaoy
+ */
+import util.ElementSet;
+
+public class ChvatalSolver extends GreedySolver {
+
+    public ChvatalSolver() {
+        _name = "Chvatal";
+
+    }
+//Rather than add the set that covers the most elements,
+//Chv´atal’s algorithm adds the set that has the smallest cost per uncovered element, called the cost-coverage
+//ratio. For example, if set i has cost ci and covers ei elements that have not already been covered by other
+//selected sets, then it has a cost-coverage ratio of ci/ei
+
+    public ElementSet nextBestSet() {
+        double costPer = 0.0;
+        double temp = 0.0;
+        double tempcount = 0.0;
+        double firstcount = 0.0;
+
+        if (usedEle.isEmpty()) { //when at the first loop no need to count the uncovered elements
+            temp = (double) iter.first().getCost() / iter.first().getNumElements();
+            _bestSet = iter.first();
+
+            for (ElementSet e : iter) {
+                costPer = (double) e.getCost() / e.getNumElements();
+                if (costPer < temp) {
+                    temp = costPer;
+                    _bestSet = e;
+
+                }
+                costPer = 0.0;
+            }
+        }
+
+        if (!usedEle.isEmpty()) {
+            for (int x : iter.first().getAllElements()) {
+                if (!usedEle.contains(x)) {
+                    firstcount++;
+                }
+            } //first
+            temp = (double) iter.first().getCost() / firstcount; //first defined;
+            _bestSet = iter.first();
+
+            for (ElementSet e : iter) {
+                for (int i : e.getAllElements()) {
+                    if (!usedEle.contains(i)) {
+                        tempcount++;
+                    }
+                }
+
+                costPer = (double) e.getCost() / tempcount;
+                if ((costPer < temp) && (tempcount != 0)) {
+                    temp = costPer;
+                    _bestSet = e;
+
+                }
+                costPer = 0.0;
+                tempcount = 0.0;
+            }
+
+        }
+        return _bestSet;
+    }
+}
