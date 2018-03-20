@@ -1,0 +1,79 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package model;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.SortedSet;
+import util.ElementSet;
+import java.util.TreeSet;
+
+public class SCPModel {
+
+    private SortedSet<ElementSet> _elementSets;
+    private SortedSet<Integer> _elements;
+
+    public SCPModel() {
+        _elementSets = new TreeSet();
+        _elements = new TreeSet();
+    }
+
+    public void addSetToCover(int id, double cost, Collection<Integer> elements) {
+        _elements.addAll(elements); //add all elements to the set
+        
+        ElementSet temp = new ElementSet(id, cost, elements);
+        _elementSets.add(temp);
+    }
+
+    public int getNumElements() { //get the size of the set contains all elements
+        return _elements.size();
+    }
+
+    public int getNumElementSets() { //get how many element sets are there
+        return _elementSets.size();
+    }
+
+    public SortedSet<ElementSet> getElementsetCopy() {  
+        SortedSet<ElementSet> copy = new TreeSet();
+        for (ElementSet e: _elementSets)
+            copy.add(e);
+        
+        return copy;
+    }
+   
+   
+   //public SortedSet<ElementSet> getElementSet(){
+     //  return _elementSets;
+   //}
+
+    public String toString() {
+           StringBuilder sb = new StringBuilder();
+    sb.append("\nWeighted SCP model:\n---------------------\n");
+    sb.append("Number of elements (n): " + getNumElements() + "\n");
+    sb.append("Number of sets (m): " + getNumElementSets() + "\n");
+    sb.append("\nSet details:\n");
+    sb.append("----------------------------------------------------------\n");
+    for (ElementSet e : _elementSets)
+      sb.append(e + "\n");
+    
+   
+    
+    return sb.toString();
+ 
+    }
+    
+    public static void main(String[] args) {
+        SCPModel temp = new SCPModel();
+        temp.addSetToCover(1, 45.6, Arrays.asList(new Integer[] {2,6,10}));
+        temp.addSetToCover(4, 34.7, Arrays.asList(new Integer[] {8,6,10,3,7,9}));
+        temp.addSetToCover(3, 356.7, Arrays.asList(new Integer[] {3}));
+        System.out.println("number of element sets should be 3:" + temp.getNumElementSets());
+        System.out.println("number of elements should be 7:" + temp.getNumElements());
+        System.out.println("copied:" + temp.getElementsetCopy());
+    }
+}
+
