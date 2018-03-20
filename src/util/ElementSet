@@ -1,0 +1,89 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package util;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+public class ElementSet implements Comparable {
+
+    private int _id;
+    private double _cost;
+    private SortedSet<Integer> _elements;
+
+    public ElementSet(int id, double cost, Collection<Integer> elements) {
+        _id = id;
+        _cost = cost;
+        _elements = new TreeSet(elements);
+        
+    }
+
+
+    public int getId() {
+        return _id;
+    }
+
+    public double getCost() {
+        return _cost;
+    }
+
+    public double getNumElements() {  //return the total number of elements in the set
+        return _elements.size();
+    }
+
+    public boolean containsElement(int id) {
+        if(_elements.contains(id))
+            return true;
+        return false;
+    }
+
+    public int countElementsCovered(Set<Integer> elements_to_cover) {
+        int result = 0;
+        for(int x: elements_to_cover){
+            if (containsElement(x))
+                result ++;
+        }
+        return result;
+    }
+    
+     public SortedSet<Integer> getAllElements(){
+       return _elements;
+    }
+
+    @Override
+    public String toString() {
+          StringBuilder sb = new StringBuilder();
+	     //format
+	      sb.append(String.format("Set ID:   %d   Cost:   %6.2f   Element IDs: %s",  _id, _cost,_elements));//turn the haspmap of the calling vector into string
+	    
+	    return sb.toString();
+    }
+ 
+    @Override
+    public int compareTo(Object o) { //compute the difference bewteen 2 ids
+        if (!(o instanceof ElementSet))
+                return 0;
+        ElementSet n = (ElementSet) o;
+        return  _id - n._id;
+    }
+
+    public boolean equals(Object o) {
+        if (!(o instanceof ElementSet))
+            return false;
+        ElementSet n = (ElementSet)o;
+        
+        if( (n._id == _id)&&(n._elements.equals(_elements))&&(n._cost == _cost))
+            return true;
+        
+        return false;      
+     }
+
+    
+}
+
